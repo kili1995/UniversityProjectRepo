@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using University.Api.DataAccess;
-using University.Api.Models.DataModels;
+using University.DataAccess.Context;
+using University.DataAccess.Models.DataModels;
 
 namespace University.Api.Controllers
 {
