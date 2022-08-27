@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UniversityAppBackend.Models.DataModels
+namespace University.DataAccess.Models.DataModels
 {
     public class Student : BaseEntity
     {        
@@ -11,5 +12,14 @@ namespace UniversityAppBackend.Models.DataModels
         [Required]
         public DateTime BirthDay { get; set; }
         public ICollection<Course> Courses { get; set; } = new List<Course>();
+        
+        [NotMapped]
+        public virtual int Age 
+        { 
+            get
+            {
+                return DateTime.Today.AddTicks(-BirthDay.Ticks).Year - 1;
+            }
+        }
     }
 }

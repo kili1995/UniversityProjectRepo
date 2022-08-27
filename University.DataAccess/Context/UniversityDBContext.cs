@@ -1,7 +1,7 @@
-﻿namespace UniversityAppBackend.DataAccess
+﻿namespace University.DataAccess.Context
 {
     using Microsoft.EntityFrameworkCore;
-    using UniversityAppBackend.Models.DataModels;
+    using University.DataAccess.Models.DataModels;
 
     public class UniversityDBContext : DbContext
     {

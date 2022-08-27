@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UniversityAppBackend.Models.DataModels
+namespace University.DataAccess.Models.DataModels
 {
     public class Course : BaseEntity
     {

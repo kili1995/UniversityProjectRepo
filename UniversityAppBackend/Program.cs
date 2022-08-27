@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using UniversityAppBackend.DataAccess;
+using University.Api.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UniversityAppBackend.DataAccess;
+using University.DataAccess.Context;
 
 #nullable disable
 
-namespace UniversityAppBackend.Migrations
+namespace University.DataAccess.Migrations
 {
     [DbContext(typeof(UniversityDBContext))]
     [Migration("20220823230452_Create Users Table")]
@@ -24,7 +24,7 @@ namespace UniversityAppBackend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("UniversityAppBackend.Models.DataModels.User", b =>
+            modelBuilder.Entity("University.DataAccess.Models.DataModels.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

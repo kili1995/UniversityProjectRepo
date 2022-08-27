@@ -1,4 +1,4 @@
-﻿namespace UniversityAppBackend.Models.DataModels
+﻿namespace University.DataAccess.Models.DataModels
 {
     using System.ComponentModel.DataAnnotations;
     public class User : BaseEntity

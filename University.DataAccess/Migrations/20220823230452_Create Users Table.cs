@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace UniversityAppBackend.Migrations
+namespace University.DataAccess.Migrations
 {
     public partial class CreateUsersTable : Migration
     {

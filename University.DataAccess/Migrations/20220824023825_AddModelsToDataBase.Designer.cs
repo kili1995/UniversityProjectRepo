@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UniversityAppBackend.DataAccess;
+using University.DataAccess.Context;
 
 #nullable disable
 
-namespace UniversityAppBackend.Migrations
+namespace University.DataAccess.Migrations
 {
     [DbContext(typeof(UniversityDBContext))]
     [Migration("20220824023825_AddModelsToDataBase")]
@@ -54,7 +54,7 @@ namespace UniversityAppBackend.Migrations
                     b.ToTable("CourseStudent");
                 });
 
-            modelBuilder.Entity("UniversityAppBackend.Models.DataModels.Category", b =>
+            modelBuilder.Entity("University.DataAccess.Models.DataModels.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +95,7 @@ namespace UniversityAppBackend.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("UniversityAppBackend.Models.DataModels.Course", b =>
+            modelBuilder.Entity("University.DataAccess.Models.DataModels.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -161,7 +161,7 @@ namespace UniversityAppBackend.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("UniversityAppBackend.Models.DataModels.Curriculum", b =>
+            modelBuilder.Entity("University.DataAccess.Models.DataModels.Curriculum", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -208,7 +208,7 @@ namespace UniversityAppBackend.Migrations
                     b.ToTable("Curricula");
                 });
 
-            modelBuilder.Entity("UniversityAppBackend.Models.DataModels.Student", b =>
+            modelBuilder.Entity("University.DataAccess.Models.DataModels.Student", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -258,7 +258,7 @@ namespace UniversityAppBackend.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("UniversityAppBackend.Models.DataModels.User", b =>
+            modelBuilder.Entity("University.DataAccess.Models.DataModels.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -315,13 +315,13 @@ namespace UniversityAppBackend.Migrations
 
             modelBuilder.Entity("CategoryCourse", b =>
                 {
-                    b.HasOne("UniversityAppBackend.Models.DataModels.Category", null)
+                    b.HasOne("University.DataAccess.Models.DataModels.Category", null)
                         .WithMany()
                         .HasForeignKey("CourseCategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniversityAppBackend.Models.DataModels.Course", null)
+                    b.HasOne("University.DataAccess.Models.DataModels.Course", null)
                         .WithMany()
                         .HasForeignKey("CoursesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -330,31 +330,31 @@ namespace UniversityAppBackend.Migrations
 
             modelBuilder.Entity("CourseStudent", b =>
                 {
-                    b.HasOne("UniversityAppBackend.Models.DataModels.Course", null)
+                    b.HasOne("University.DataAccess.Models.DataModels.Course", null)
                         .WithMany()
                         .HasForeignKey("CoursesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniversityAppBackend.Models.DataModels.Student", null)
+                    b.HasOne("University.DataAccess.Models.DataModels.Student", null)
                         .WithMany()
                         .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UniversityAppBackend.Models.DataModels.Curriculum", b =>
+            modelBuilder.Entity("University.DataAccess.Models.DataModels.Curriculum", b =>
                 {
-                    b.HasOne("UniversityAppBackend.Models.DataModels.Course", "Course")
+                    b.HasOne("University.DataAccess.Models.DataModels.Course", "Course")
                         .WithOne("Curriculum")
-                        .HasForeignKey("UniversityAppBackend.Models.DataModels.Curriculum", "CourseId")
+                        .HasForeignKey("University.DataAccess.Models.DataModels.Curriculum", "CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("UniversityAppBackend.Models.DataModels.Course", b =>
+            modelBuilder.Entity("University.DataAccess.Models.DataModels.Course", b =>
                 {
                     b.Navigation("Curriculum")
                         .IsRequired();
