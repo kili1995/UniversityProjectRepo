@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using University.BusinessLogic.Students;
 using University.DataAccess.Context;
 using University.DataAccess.Models.DataModels;
 
@@ -15,10 +16,15 @@ namespace University.Api.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly UniversityDBContext _context;
+        private readonly IStudentsService _studentsService;
 
-        public StudentsController(UniversityDBContext context)
+        public StudentsController(
+            UniversityDBContext context,
+            IStudentsService studentsService
+        )
         {
             _context = context;
+            _studentsService = studentsService;
         }
 
         // GET: api/Students
@@ -119,6 +125,20 @@ namespace University.Api.Controllers
         private bool StudentExists(int id)
         {
             return (_context.Students?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [HttpGet, Route("GetStudentsWithoutCourses")]
+        public async Task<IActionResult> GetStudentsWithoutCourses()
+        {
+            var students = await _studentsService.GetStudentsWithoutCourse();
+            return Ok(students);
+        }
+
+        [HttpGet, Route("GetStudentCourse")]
+        public async Task<IActionResult> GetStudentCourse(int studentId)
+        {
+            var courses = await _studentsService.GetStudentCourse(studentId);
+            return Ok(courses);
         }
     }
 }

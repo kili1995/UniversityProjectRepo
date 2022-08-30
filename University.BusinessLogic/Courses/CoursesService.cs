@@ -15,7 +15,7 @@ namespace University.BusinessLogic.Courses
         public async Task<List<Course>> GetCourseByLevelAndCategory(CourseLevel level, Category category)
         {
             List<Course> courses = new List<Course>();
-            if(_context.Courses != null)
+            if (_context.Courses != null)
             {
                 courses = await _context.Courses.Where(course => course.CourseLevel == level &&
                     course.CourseCategories.Contains(category)).ToListAsync();
@@ -41,6 +41,55 @@ namespace University.BusinessLogic.Courses
                 courses = await _context.Courses.Where(course => !course.Students.Any()).ToListAsync();
             }
             return courses;
+        }
+
+        public async Task<List<Course>> GetCoursesByCategory(string category)
+        {
+            List<Course> courses = new List<Course>();
+            if (_context.Courses != null)
+            {
+                courses = await _context.Courses
+                    .Where(course => !course.CourseCategories.Any(x => x.Name == category))
+                    .ToListAsync();
+            }
+            return courses;
+        }
+
+        public async Task<List<Course>> GetCoursesWithoutCurriculum()
+        {
+            List<Course> courses = new List<Course>();
+            if (_context.Courses != null)
+            {
+                courses = await _context.Courses
+                    .Where(course => course.Curriculum == null)
+                    .ToListAsync();
+            }
+            return courses;
+        }
+
+        public async Task<Course?> GetCourseById(int id)
+        {
+            Course? course = new();
+            if (_context.Courses != null)
+            {
+                course = await _context.Courses
+                    .Where(course => course.Id == id)
+                    .FirstOrDefaultAsync();                
+            }
+            return course;
+        }
+
+        public async Task<List<Student>> GetStudentsFromCourse(int courseId)
+        {
+            List<Student> students = new List<Student>();
+            if (_context.Courses != null)
+            {
+                students = await _context.Courses
+                    .Where(course => course.Id == courseId)
+                    .SelectMany(x => x.Students)
+                    .ToListAsync();
+            }
+            return students;
         }
     }
 }

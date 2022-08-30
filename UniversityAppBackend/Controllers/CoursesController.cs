@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using University.BusinessLogic.Courses;
 using University.DataAccess.Context;
 using University.DataAccess.Models.DataModels;
 
@@ -10,10 +11,15 @@ namespace University.Api.Controllers
     public class CoursesController : ControllerBase
     {
         private readonly UniversityDBContext _context;
+        private readonly ICoursesService _coursesService;        
 
-        public CoursesController(UniversityDBContext context)
+        public CoursesController(
+            UniversityDBContext context,
+            ICoursesService coursesService
+        )
         {
             _context = context;
+            _coursesService = coursesService;
         }
 
         // GET: api/Courses
@@ -114,6 +120,42 @@ namespace University.Api.Controllers
         private bool CourseExists(int id)
         {
             return (_context.Courses?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [HttpGet, Route("GetCoursesByCategory")]
+        public async Task<IActionResult> GetCoursesByCategory(string category)
+        {
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                return BadRequest("Envie una categoría para poder filtrar.");
+            }
+            var courses = await _coursesService.GetCoursesByCategory(category);
+            return Ok(courses);
+        }
+
+        [HttpGet, Route("GetCoursesWithoutCurriculum")]
+        public async Task<IActionResult> GetCoursesWithoutCurriculum()
+        {           
+            var courses = await _coursesService.GetCoursesWithoutCurriculum();
+            return Ok(courses);
+        }
+
+        [HttpGet, Route("GetCurriculumByCourse")]
+        public async Task<IActionResult> GetCurriculumByCourse(int courseId)
+        {
+            var course = await _coursesService.GetCourseById(courseId);
+            if(course == null)
+            {
+                return NotFound();
+            }
+            return Ok(course.Curriculum);
+        }
+
+        [HttpGet, Route("GetStudentsFromCourse")]
+        public async Task<IActionResult> GetStudentsFromCourse(int courseId)
+        {
+            var students = await _coursesService.GetStudentsFromCourse(courseId);
+            return Ok(students);
         }
     }
 }

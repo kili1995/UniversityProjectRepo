@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using University.BusinessLogic.Courses;
+using University.BusinessLogic.Students;
 using University.DataAccess.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddTransient<ICoursesService, CoursesService>();
+builder.Services.AddTransient<IStudentsService, StudentsService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "PolicyCorsUniversityApi", corsBuilder =>
+    {
+        corsBuilder.AllowAnyOrigin();
+        corsBuilder.AllowAnyMethod();
+        corsBuilder.AllowAnyHeader();
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,5 +47,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("PolicyCorsUniversityApi");
 
 app.Run();

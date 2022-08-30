@@ -7,5 +7,9 @@ namespace University.BusinessLogic.Students
         Task<List<Student>> GetAdultStudents();
 
         Task<List<Student>> GetStudentsWithAlmostOneCourse();
+
+        Task<List<Student>> GetStudentsWithoutCourse();
+
+        Task<List<Course>> GetStudentCourse(int studentId);
     }
 }
