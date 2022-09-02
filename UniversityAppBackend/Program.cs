@@ -14,6 +14,9 @@ builder.Services.AddDbContext<UniversityDBContext>(options =>
 });
 #endregion
 
+//Add services for JWT Authorization
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
