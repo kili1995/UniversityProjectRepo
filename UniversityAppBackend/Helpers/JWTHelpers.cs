@@ -6,7 +6,7 @@
     using University.Api.Models;
     public static class JWTHelpers
     {
-        public const string ADMIN_ROLE = "Admin";
+        public const string ADMIN_ROLE = "Jorge M.";
         public const string ADMINISTRATOR_ROLE_CLAIM = "Administrator";
         public const string USER_ROLE_CLAIM = "Generic_User";
         public static IEnumerable<Claim> GetClaims(this UserToken userAccount, Guid Id)
@@ -33,7 +33,7 @@
 
         public static IEnumerable<Claim> GetClaims(this UserToken userAccount, out Guid Id)
         {
-            Id = new Guid();
+            Id = Guid.NewGuid();
             return GetClaims(userAccount, Id);
         }
 
@@ -75,6 +75,7 @@
                 userToken.UserName = model.UserName;
                 userToken.Id = model.Id;
                 userToken.GuidId = Id;
+                userToken.ExpiredTime = expirationTime;
                 return userToken;
             }
             catch (Exception e)

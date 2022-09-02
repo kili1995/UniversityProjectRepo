@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using University.Api.Helpers;
 using University.Api.Models;
+using University.BusinessLogic.Users;
+using University.DataAccess.Context;
 using University.DataAccess.Models.DataModels;
 
 namespace University.Api.Controllers
@@ -13,29 +15,18 @@ namespace University.Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly JWTSettings _jWTSettings;
-        private IEnumerable<User> Logins = new List<User>()
-        {
-            new User()
-            {
-                Id = 1,
-                Email = "jorgecapello1995@gmail.com",
-                CreatedBy = "Jorge",
-                CreationDate = DateTime.Now,
-                Deleted = false,
-                DeletedBy = "",
-                DeletedDate = null,
-                LastName = "Capello",
-                Name = "Jorge M.",
-                Password = "kiligan",
-                UpdatedBy = "",
-                UpdatedDate = null
-            }
-        };
+        private readonly UniversityDBContext _universityDBContext;
+        private readonly IUserService _userService;
+        
         public AccountController(
-            JWTSettings jwtSettings    
+            JWTSettings jwtSettings,
+            UniversityDBContext universityDBContext,
+            IUserService userService
         )
         {
             _jWTSettings = jwtSettings;
+            _universityDBContext = universityDBContext;
+            _userService = userService;
         }
 
         [HttpPost]
@@ -43,13 +34,12 @@ namespace University.Api.Controllers
         {
             try
             {
-                var token = new UserToken();
-                if (!Logins.Any(x => x.Name.Equals(userLogin.UserName, StringComparison.OrdinalIgnoreCase)))
+                var user = await _userService.GetUserByName(userLogin.UserName);
+                if (user == null)
                 {
                     return BadRequest("No se encontró el usuario.");
                 }
-                var user = Logins.FirstOrDefault(x => x.Name.Equals(userLogin.UserName, StringComparison.OrdinalIgnoreCase));
-                token = JWTHelpers.GetTokenKey(new UserToken()
+                var token = JWTHelpers.GetTokenKey(new UserToken()
                 {
                     EmailId = user.Email,
                     UserName = user.Name,
@@ -68,7 +58,8 @@ namespace University.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.ADMIN_ROLE)]
         public async Task<IActionResult> GetUserList()
         {
-            return Ok(Logins);
+            var users = await _userService.GetAllUsers();
+            return Ok(users);
         }
     }
 }
