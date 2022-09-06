@@ -42,7 +42,7 @@ namespace University.Api.Controllers
                 var token = JWTHelpers.GetTokenKey(new UserToken()
                 {
                     EmailId = user.Email,
-                    UserName = user.Name,
+                    UserName = user.Username,
                     Id = user.Id,
                     GuidId = Guid.NewGuid()                    
                 }, _jWTSettings);

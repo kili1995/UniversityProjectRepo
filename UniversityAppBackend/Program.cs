@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using University.Api.Helpers;
+using University.Api.Infraestructure;
 using University.BusinessLogic.Courses;
 using University.BusinessLogic.Students;
 using University.DataAccess.Context;
@@ -21,8 +22,7 @@ builder.Services.AddJwtTokenServices(builder.Configuration);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<ICoursesService, CoursesService>();
-builder.Services.AddScoped<IStudentsService, StudentsService>();
+builder.Services.AddServicesToProject();
 
 builder.Services.AddAuthorization(options =>
 {

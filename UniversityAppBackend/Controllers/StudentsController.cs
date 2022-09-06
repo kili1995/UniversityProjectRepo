@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using University.Api.Helpers;
 using University.BusinessLogic.Students;
 using University.DataAccess.Context;
 using University.DataAccess.Models.DataModels;
@@ -59,6 +63,7 @@ namespace University.Api.Controllers
         // PUT: api/Students/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.ADMIN_ROLE)]
         public async Task<IActionResult> PutStudent(int id, Student student)
         {
             if (id != student.Id)
@@ -88,8 +93,8 @@ namespace University.Api.Controllers
         }
 
         // POST: api/Students
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.ADMIN_ROLE)]
         public async Task<ActionResult<Student>> PostStudent(Student student)
         {
           if (_context.Students == null)
@@ -104,6 +109,7 @@ namespace University.Api.Controllers
 
         // DELETE: api/Students/5
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.ADMIN_ROLE)]
         public async Task<IActionResult> DeleteStudent(int id)
         {
             if (_context.Students == null)
