@@ -53,7 +53,7 @@
             if(_context.Users != null)
             {
                 user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.Username.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    .FirstOrDefaultAsync(u => u.Username.ToLower().Trim() == name.ToLower().Trim());
             }
             return user;
         }
@@ -75,7 +75,7 @@
             {
                 if(_context.Users != null)
                 {
-                    var user = await _context.Users.FirstOrDefaultAsync(x => x.Username.Equals(userName, StringComparison.OrdinalIgnoreCase));
+                    var user = await _context.Users.FirstOrDefaultAsync(x => x.Username.Trim() == userName.Trim());
                     if(user != null)
                     {
                         isValid = BCrypt.Net.BCrypt.Verify(password, user.Password);

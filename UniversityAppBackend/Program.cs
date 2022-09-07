@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using University.Api.Helpers;
 using University.Api.Infraestructure;
@@ -7,6 +8,8 @@ using University.BusinessLogic.Students;
 using University.DataAccess.Context;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 #region University Context
 const string CONNECTION_NAME = "UniversityDB";
@@ -76,6 +79,14 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
+var supportedCultures = new[] { "en-US", "fr-FR", "es-ES" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("es-ES")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
