@@ -1,0 +1,40 @@
+<div>
+    <form [formGroup]="registerForm" (submit)="createUser()">
+        <mat-grid-list cols="1" rowHeight="50px">
+            <mat-grid-tile [rowspan]="1" [colspan]="1">
+                <h2>Register</h2>
+            </mat-grid-tile>
+            <mat-grid-tile [rowspan]="1" [colspan]="1">
+                <mat-form-field appearance="fill">
+                    <mat-label>Username</mat-label>
+                    <input matInput placeholder="Example" formControlName="userName" type="text">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile [rowspan]="1" [colspan]="1">
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput formControlName="email" placeholder="Ex. mail@example.com">  
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile [rowspan]="1" [colspan]="1">
+                <mat-form-field appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" placeholder="********" formControlName="password">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile [rowspan]="1" [colspan]="1">
+                <mat-form-field appearance="fill">
+                    <mat-label>Repeate Password</mat-label>
+                    <input matInput type="password" placeholder="********" formControlName="repeatedPassword">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile [rowspan]="1" [colspan]="1">
+                <button type="submit" mat-raised-button color="primary" [disabled]="registerForm.invalid || showSpinner">Create Account</button>
+            </mat-grid-tile>
+            
+        </mat-grid-list>        
+    </form>    
+    <div *ngIf="showSpinner">
+        <mat-progress-spinner class="mat-spinner"  mode="indeterminate"></mat-progress-spinner>
+    </div>
+</div>

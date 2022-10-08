@@ -1,19 +1,18 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using System.Text.RegularExpressions;
-using University.Api.Controllers.Account.Models;
-using University.Api.Helpers;
-using University.Api.Models;
-using University.BusinessLogic.Users;
-using University.DataAccess.Context;
-using University.DataAccess.Models.DataModels;
-
-namespace University.Api.Controllers.Account
+﻿namespace University.Api.Controllers.Account.Version1
 {
-    [Route("api/[controller]/[action]")]
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
+    using University.Api.Controllers.Account.Models;
+    using University.Api.Helpers;
+    using University.Api.Models;
+    using University.BusinessLogic.Users;
+    using University.DataAccess.Context;
+    using University.DataAccess.Models.DataModels;
+
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -21,25 +20,29 @@ namespace University.Api.Controllers.Account
         private readonly UniversityDBContext _universityDBContext;
         private readonly IUserService _userService;
         private readonly IStringLocalizer<AccountController> _accountLocalizer;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(
             JWTSettings jwtSettings,
             UniversityDBContext universityDBContext,
             IUserService userService,
-            IStringLocalizer<AccountController> accountLocalizer
+            IStringLocalizer<AccountController> accountLocalizer,
+            ILogger<AccountController> logger
         )
         {
             _jWTSettings = jwtSettings;
             _universityDBContext = universityDBContext;
             _userService = userService;
             _accountLocalizer = accountLocalizer;
+            _logger = logger;
         }
 
         [HttpPost]
+        [MapToApiVersion("1.0")]
         public async Task<IActionResult> GetToken(UserLogins userLogin)
         {
             try
-            {
+            {                
                 bool validUser = await _userService.ValidateUserByNameAndPassword(userLogin.UserName, userLogin.Password);
                 if (!validUser)
                 {
@@ -62,6 +65,7 @@ namespace University.Api.Controllers.Account
         }
 
         [HttpGet]
+        [MapToApiVersion("1.0")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.ADMIN_ROLE)]
         public async Task<IActionResult> GetUserList()
         {
@@ -70,6 +74,7 @@ namespace University.Api.Controllers.Account
         }
 
         [HttpPost]
+        [MapToApiVersion("1.0")]
         public async Task<IActionResult> RegisterNewUser(RegisterUserModelUI registerData)
         {
             if (string.IsNullOrWhiteSpace(registerData.Username))
@@ -85,7 +90,7 @@ namespace University.Api.Controllers.Account
                 return BadRequest("Ingrese un email.");
             }
             var userByName = await _userService.GetUserByName(registerData.Username);
-            if(userByName != null)
+            if (userByName != null)
             {
                 return BadRequest("Nombre de usuario en uso. Intente con otro.");
             }
@@ -100,7 +105,7 @@ namespace University.Api.Controllers.Account
                 Name = registerData.Username,
                 Password = registerData.Password
             });
-            if(response != null)
+            if (response != null)
             {
                 return Ok(new
                 {

@@ -5,9 +5,9 @@ VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "University.Api", "UniversityAppBackend\University.Api.csproj", "{6F48232A-0786-411C-8F7F-69904906E695}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "University.BusinessLogic", "University.BusinessLogic\University.BusinessLogic.csproj", "{8F8AC583-24CB-4557-A610-ACD169DD5A82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "University.BusinessLogic", "University.BusinessLogic\University.BusinessLogic.csproj", "{8F8AC583-24CB-4557-A610-ACD169DD5A82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "University.DataAccess", "University.DataAccess\University.DataAccess.csproj", "{D01B0F8D-1535-4C72-8F0F-37624B883880}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "University.DataAccess", "University.DataAccess\University.DataAccess.csproj", "{D01B0F8D-1535-4C72-8F0F-37624B883880}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

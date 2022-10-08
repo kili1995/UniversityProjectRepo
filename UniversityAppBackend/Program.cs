@@ -1,13 +1,20 @@
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using University.Api.Helpers;
 using University.Api.Infraestructure;
-using University.BusinessLogic.Courses;
-using University.BusinessLogic.Students;
 using University.DataAccess.Context;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((hostBuilderCtx, loggerConf) =>
+{
+    loggerConf
+        .WriteTo.Console()
+        .WriteTo.Debug()
+        .ReadFrom.Configuration(hostBuilderCtx.Configuration);
+});
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -20,6 +27,21 @@ builder.Services.AddDbContext<UniversityDBContext>(options =>
 });
 #endregion
 
+
+//Add configurations for ApiVersioning
+builder.Services.AddApiVersioning(setup =>
+{
+    setup.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    setup.AssumeDefaultVersionWhenUnspecified = true;
+    setup.ReportApiVersions = true;
+});
+
+builder.Services.AddVersionedApiExplorer(setup =>
+{
+    setup.GroupNameFormat = "'v'VVV";
+    setup.SubstituteApiVersionInUrl = true;
+});
+
 //Add services for JWT Authorization
 builder.Services.AddJwtTokenServices(builder.Configuration);
 
@@ -31,8 +53,6 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("UserOnlyPolicy", policy => policy.RequireClaim("UserOnly", "User1"));
 });
-
-
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -67,6 +87,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "PolicyCorsUniversityApi", corsBuilder =>
@@ -80,6 +102,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+
 var supportedCultures = new[] { "en-US", "fr-FR", "es-ES" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture("es-ES")
@@ -92,8 +116,17 @@ app.UseRequestLocalization(localizationOptions);
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options => { 
+        foreach(var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
+        {
+            options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                description.GroupName.ToUpperInvariant());
+        }
+    
+    });
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

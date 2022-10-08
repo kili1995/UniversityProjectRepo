@@ -1,11 +1,12 @@
-﻿namespace University.Api.Controllers
+﻿namespace University.Api.Controllers.Users
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using University.DataAccess.Context;
     using University.DataAccess.Models.DataModels;
 
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {

@@ -2,20 +2,20 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 using University.Api.Helpers;
 using University.BusinessLogic.Courses;
 using University.DataAccess.Context;
 using University.DataAccess.Models.DataModels;
 
-namespace University.Api.Controllers
+namespace University.Api.Controllers.Courses
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class CoursesController : ControllerBase
     {
         private readonly UniversityDBContext _context;
-        private readonly ICoursesService _coursesService;        
+        private readonly ICoursesService _coursesService;
 
         public CoursesController(
             UniversityDBContext context,
@@ -30,10 +30,10 @@ namespace University.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
-          if (_context.Courses == null)
-          {
-              return NotFound();
-          }
+            if (_context.Courses == null)
+            {
+                return NotFound();
+            }
             return await _context.Courses.ToListAsync();
         }
 
@@ -41,10 +41,10 @@ namespace University.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(int id)
         {
-          if (_context.Courses == null)
-          {
-              return NotFound();
-          }
+            if (_context.Courses == null)
+            {
+                return NotFound();
+            }
             var course = await _context.Courses.FindAsync(id);
 
             if (course == null)
@@ -92,10 +92,10 @@ namespace University.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.ADMIN_ROLE)]
         public async Task<ActionResult<Course>> PostCourse(Course course)
         {
-          if (_context.Courses == null)
-          {
-              return Problem("Entity set 'UniversityDBContext.Courses'  is null.");
-          }
+            if (_context.Courses == null)
+            {
+                return Problem("Entity set 'UniversityDBContext.Courses'  is null.");
+            }
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
 
@@ -141,7 +141,7 @@ namespace University.Api.Controllers
 
         [HttpGet, Route("GetCoursesWithoutCurriculum")]
         public async Task<IActionResult> GetCoursesWithoutCurriculum()
-        {           
+        {
             var courses = await _coursesService.GetCoursesWithoutCurriculum();
             return Ok(courses);
         }
@@ -150,7 +150,7 @@ namespace University.Api.Controllers
         public async Task<IActionResult> GetCurriculumByCourse(int courseId)
         {
             var course = await _coursesService.GetCourseById(courseId);
-            if(course == null)
+            if (course == null)
             {
                 return NotFound();
             }

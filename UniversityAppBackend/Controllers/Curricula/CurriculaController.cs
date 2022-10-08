@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using University.Api.Helpers;
 using University.DataAccess.Context;
 using University.DataAccess.Models.DataModels;
 
-namespace University.Api.Controllers
+namespace University.Api.Controllers.Curricula
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class CurriculaController : ControllerBase
     {
@@ -29,10 +24,10 @@ namespace University.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Curriculum>>> GetCurricula()
         {
-          if (_context.Curricula == null)
-          {
-              return NotFound();
-          }
+            if (_context.Curricula == null)
+            {
+                return NotFound();
+            }
             return await _context.Curricula.ToListAsync();
         }
 
@@ -40,10 +35,10 @@ namespace University.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Curriculum>> GetCurriculum(int id)
         {
-          if (_context.Curricula == null)
-          {
-              return NotFound();
-          }
+            if (_context.Curricula == null)
+            {
+                return NotFound();
+            }
             var curriculum = await _context.Curricula.FindAsync(id);
 
             if (curriculum == null)
@@ -90,10 +85,10 @@ namespace University.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Constants.ADMIN_ROLE)]
         public async Task<ActionResult<Curriculum>> PostCurriculum(Curriculum curriculum)
         {
-          if (_context.Curricula == null)
-          {
-              return Problem("Entity set 'UniversityDBContext.Curricula'  is null.");
-          }
+            if (_context.Curricula == null)
+            {
+                return Problem("Entity set 'UniversityDBContext.Curricula'  is null.");
+            }
             _context.Curricula.Add(curriculum);
             await _context.SaveChangesAsync();
 
